@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block main %}
+    {% for link in links reversed %}
+        <div class="card mt-2">
+            <div class="card-body">
+                <div class="h5 card-title">{{ link.url }}</div>
+                <div class="h6 card-subtitle">
+                    投稿者：
+                    {{ link.created_by }}
+                    {% if link.created_by.is_superuser %}
+                    <span style="color:red"><b>(管理人)</b></span>
+                    {% endif %}
+                </div>
+                <div class="h6 card-subtitle">
+                    投稿日：
+                    {{ link.created_at }}
+                </div>
+                <p class="card-text">{{ link.description }}</p>
+                <p class="card-text">検索ワード：「{{ link.search_word }}」</p>
+                <a href="{{ link.url }}" class="btn btn-primary">このサイトを見る</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
