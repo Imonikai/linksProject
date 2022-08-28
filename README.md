@@ -1,0 +1,2 @@
+# linksProject
+python課外授業でdjangoを使うために作った練習・試作サービス
