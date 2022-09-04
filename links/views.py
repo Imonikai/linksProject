@@ -24,6 +24,9 @@ def link_new(request):
                 link.ip_address = client_ip
                 link.save()
                 return redirect(top)
+        else:
+            form = LinkForm()
+            return render(request, 'links/link_new.html', {'form':form})
     else:
         form = LinkForm()
         return render(request, 'links/link_new.html', {'form':form})
