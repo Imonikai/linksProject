@@ -2,8 +2,12 @@
 {% load django_bootstrap5 %}
 
 {% block main %}
+    <div class="py-4">
+        <b>有益な情報を共有して、みんなでプログラミングを楽しもう。</b>
+    </div>
+
     {% for link in links reversed %}
-        <div class="card mt-2">
+        <div class="card my-2">
             <div class="card-body">
                 <div class="h5 card-title">{{ link.url }}</div>
                 <div class="h6 card-subtitle">
