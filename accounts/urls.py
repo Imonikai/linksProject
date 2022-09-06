@@ -3,6 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import CreateView
 from django.urls import path
 
+from accounts.views import mypage
+
 urlpatterns = [
     path('login/', LoginView.as_view(
         redirect_authenticated_user=True,
@@ -16,4 +18,6 @@ urlpatterns = [
         form_class=UserCreationForm,
         success_url='/',
     ), name='signup'),
+
+    path('mypage/', mypage, name='mypage'),
 ]

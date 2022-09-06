@@ -43,9 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #外部から追加したアプリケーション
+    'django_bootstrap5',
+
+    #作成したアプリケーション
     'links',
     'accounts',
-    'django_bootstrap5',
 ]
 
 MIDDLEWARE = [
