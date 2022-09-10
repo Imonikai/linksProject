@@ -19,5 +19,5 @@ urlpatterns = [
         success_url='/',
     ), name='signup'),
 
-    path('mypage/', mypage, name='mypage'),
+    path('mypage/<str:username>/', mypage, name='mypage'),
 ]

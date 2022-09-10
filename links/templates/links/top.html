@@ -6,25 +6,79 @@
         <b>有益な情報を共有して、みんなでプログラミングを楽しもう。</b>
     </div>
 
-    {% for link in links reversed %}
-        <div class="card my-2">
-            <div class="card-body">
-                <div class="h5 card-title">{{ link.url }}</div>
-                <div class="h6 card-subtitle">
-                    投稿者：
-                    {{ link.created_by }}
-                    {% if link.created_by.is_superuser %}
-                    <span style="color:red"><b>(管理人)</b></span>
+    {% if user.is_authenticated %}
+        {% for link in links reversed %}
+            <div class="card my-2 shadow">
+                <div class="card-body">
+                    <div class="h5 card-title">{{ link.link.url }}</div>
+                    <div class="h6 card-subtitle">
+                        投稿者：
+                        {{ link.link.created_by }}
+                        {% if link.link.created_by.is_superuser %}
+                        <span style="color:red"><b>(管理人)</b></span>
+                        {% endif %}
+                    </div>
+                    <div class="h6 card-subtitle">
+                        投稿日：
+                        {{ link.link.created_at }}
+                    </div>
+                    <p class="card-text">{{ link.link.description }}</p>
+                    <p class="card-text">検索ワード：「{{ link.link.search_word }}」</p>
+                    <a href="{{ link.link.url }}" class="btn btn-primary">このサイトを見る</a>
+                    {% if link.like %}
+                        <a class="btn btn-danger" id="likeBtn-{{ link.link.pk }}" onClick="like_change('{% url "likes:like_change" link.link.pk %}' , 'likeBtn-{{link.link.pk}}' )">♡</a>
+                    {% else %}
+                        <a class="btn btn-outline-danger" id="likeBtn-{{ link.link.pk }}" onClick="like_change('{% url "likes:like_change" link.link.pk %}' , 'likeBtn-{{link.link.pk}}' )">♡</a>
                     {% endif %}
                 </div>
-                <div class="h6 card-subtitle">
-                    投稿日：
-                    {{ link.created_at }}
-                </div>
-                <p class="card-text">{{ link.description }}</p>
-                <p class="card-text">検索ワード：「{{ link.search_word }}」</p>
-                <a href="{{ link.url }}" class="btn btn-primary">このサイトを見る</a>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+
+    {% else %}
+
+        {% for link in links reversed %}
+            <div class="card my-2 shadow">
+                <div class="card-body">
+                    <div class="h5 card-title">{{ link.url }}</div>
+                    <div class="h6 card-subtitle">
+                        投稿者：
+                        {{ link.created_by }}
+                        {% if link.created_by.is_superuser %}
+                        <span style="color:red"><b>(管理人)</b></span>
+                        {% endif %}
+                    </div>
+                    <div class="h6 card-subtitle">
+                        投稿日：
+                        {{ link.link.created_at }}
+                    </div>
+                    <p class="card-text">{{ link.description }}</p>
+                    <p class="card-text">検索ワード：「{{ link.search_word }}」</p>
+                    <a href="{{ link.link.url }}" class="btn btn-primary">このサイトを見る</a>
+
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <script>
+        function like_change( url, btnId )
+        {
+            btn = document.querySelector('#'+btnId);
+            let option = {
+                cache: 'no-cache',
+                Credential: 'sameorigin'
+            };
+
+            fetch(url, option).then( value => {
+                if( btn.className == "btn btn-danger")
+                {
+                    btn.className = "btn btn-outline-danger";
+                }
+                else
+                {
+                    btn.className = "btn btn-danger";
+                }
+            })
+        }
+    </script>
 {% endblock %}

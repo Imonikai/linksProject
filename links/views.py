@@ -6,11 +6,23 @@ from ipware import get_client_ip
 from links.models import Link
 from links.forms import LinkForm
 
+from likes.models import Like
+
 # Create your views here.
 
 def top(request):
-    links = Link.objects.all()
-    context = {'links':links}
+    tmplinks = Link.objects.all()
+    if request.user.is_authenticated:
+        links = []
+        for link in tmplinks:
+            record = Like.objects.filter(link=link, created_by=request.user)
+            if record.exists():
+                links.append({'link':link, 'like':True})
+            else:
+                links.append({'link':link, 'like':False})
+        context = {'links':links}
+    else:
+        context = {'links':tmplinks}
     return render(request, 'links/top.html', context)
 
 @login_required
