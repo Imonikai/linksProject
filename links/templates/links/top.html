@@ -1,64 +1,47 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
 
+{% block extraheader %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+{% endblock %}
+
 {% block main %}
     <div class="py-4">
         <b>有益な情報を共有して、みんなでプログラミングを楽しもう。</b>
     </div>
 
-    {% if user.is_authenticated %}
-        {% for link in links reversed %}
-            <div class="card my-2 shadow">
-                <div class="card-body">
-                    <div class="h5 card-title">{{ link.link.url }}</div>
-                    <div class="h6 card-subtitle">
-                        投稿者：
-                        {{ link.link.created_by }}
-                        {% if link.link.created_by.is_superuser %}
-                        <span style="color:red"><b>(管理人)</b></span>
-                        {% endif %}
-                    </div>
-                    <div class="h6 card-subtitle">
-                        投稿日：
-                        {{ link.link.created_at }}
-                    </div>
-                    <p class="card-text">{{ link.link.description }}</p>
-                    <p class="card-text">検索ワード：「{{ link.link.search_word }}」</p>
-                    <a href="{{ link.link.url }}" class="btn btn-primary">このサイトを見る</a>
-                    {% if link.like %}
-                        <a class="btn btn-danger" id="likeBtn-{{ link.link.pk }}" onClick="like_change('{% url "likes:like_change" link.link.pk %}' , 'likeBtn-{{link.link.pk}}' )">♡</a>
-                    {% else %}
-                        <a class="btn btn-outline-danger" id="likeBtn-{{ link.link.pk }}" onClick="like_change('{% url "likes:like_change" link.link.pk %}' , 'likeBtn-{{link.link.pk}}' )">♡</a>
+    {% for data in context reversed %}
+        <div class="card my-2 shadow">
+            <div class="card-body">
+                <div class="h5 card-title">{{ data.link.url }}</div>
+                <div class="h6 card-subtitle">
+                    投稿者：
+                    {{ data.link.created_by }}
+                    {% if data.link.created_by.is_superuser %}
+                    <span style="color:red"><b>(管理人)</b></span>
                     {% endif %}
                 </div>
-            </div>
-        {% endfor %}
-
-    {% else %}
-
-        {% for link in links reversed %}
-            <div class="card my-2 shadow">
-                <div class="card-body">
-                    <div class="h5 card-title">{{ link.url }}</div>
-                    <div class="h6 card-subtitle">
-                        投稿者：
-                        {{ link.created_by }}
-                        {% if link.created_by.is_superuser %}
-                        <span style="color:red"><b>(管理人)</b></span>
-                        {% endif %}
-                    </div>
-                    <div class="h6 card-subtitle">
-                        投稿日：
-                        {{ link.link.created_at }}
-                    </div>
-                    <p class="card-text">{{ link.description }}</p>
-                    <p class="card-text">検索ワード：「{{ link.search_word }}」</p>
-                    <a href="{{ link.link.url }}" class="btn btn-primary">このサイトを見る</a>
-
+                <div class="h6 card-subtitle">
+                    投稿日：
+                    {{ data.link.created_at }}
                 </div>
+                <p class="card-text">{{ data.link.description }}</p>
+                <p class="card-text">検索ワード：「{{ data.link.search_word }}」</p>
+                <a href="{{ data.link.url }}" class="btn btn-primary">このサイトを見る</a>
+                {% if request.user.is_authenticated %}
+                    {% if data.like %}
+                        <a class="btn btn-danger" id="likeBtn-{{ data.link.pk }}" onClick="like_change('{% url "likes:like_change" data.link.pk %}' , 'likeBtn-{{data.link.pk}}' )">
+                            <span class="material-symbols-outlined">favorite</span>
+                        </a>
+                    {% else %}
+                        <a class="btn btn-outline-danger" id="likeBtn-{{ data.link.pk }}" onClick="like_change('{% url "likes:like_change"  data.link.pk %}' , 'likeBtn-{{data.link.pk}}' )">
+                            <span class="material-symbols-outlined">favorite</span>
+                        </a>
+                    {% endif %}
+                {% endif %}
             </div>
-        {% endfor %}
-    {% endif %}
+        </div>
+    {% endfor %}
 
     <script>
         function like_change( url, btnId )
