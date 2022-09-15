@@ -20,4 +20,4 @@ class Link(models.Model):
     created_at = models.DateTimeField('投稿日', auto_now_add=True)
     ip_address = models.GenericIPAddressField('IPアドレス', protocol='both')
 
-    like_count = models.IntegerField('いいね数')
+    like_count = models.IntegerField('いいね数', default=0)
