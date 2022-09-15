@@ -11,20 +11,20 @@ from likes.models import Like
 # Create your views here.
 
 def top(request):
-    links = Link.objects.all()
     context = []
+
+    links = Link.objects.all().order_by('created_at').reverse()
     if request.user.is_authenticated:
         for link in links:
-            record = Like.objects.filter(link=link, created_by=request.user)
-            if record.exists():
-                context.append({'link':link, 'like':True})
+            if Like.objects.filter(link=link, created_by=request.user).exists():
+                context.append({'link':link, 'like':True, 'like_count':link.like_count})
             else:
-                context.append({'link':link, 'like':False})
-        context = {'context':context}
+                context.append({'link':link, 'like':False, 'like_count':link.like_count})
     else:
         for link in links:
-            context.append({'link':link, 'like':False})
-        context = {'context':context}
+            context.append({'link':link, 'like':False, 'like_count':link.like_count})
+
+    context = {'context':context}
     return render(request, 'links/top.html', context)
 
 @login_required

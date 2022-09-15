@@ -11,7 +11,7 @@ from ipware import get_client_ip
 
 def like_change(request, link_pk):
     client_ip, is_routable = get_client_ip(request)
-    link=Link.objects.filter(pk=link_pk).first()
+    link = Link.objects.get(pk=link_pk)
     if request.user.is_authenticated and link is not None:
         record = Like.objects.filter(
             link=link,
@@ -19,6 +19,8 @@ def like_change(request, link_pk):
         )
         if record.exists():
             record.delete()
+            link.like_count -= 1
+            link.save()
         else:
             new_record = Like(
                 link=link,
@@ -26,6 +28,9 @@ def like_change(request, link_pk):
                 ip_address=client_ip
             )
             new_record.save()
+            link.like_count += 1
+            link.save()
+
         data = {
             "status":"OK",
         }
