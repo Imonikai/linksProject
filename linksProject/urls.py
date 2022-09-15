@@ -17,10 +17,11 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
 
-from links.views import top
+from links.views import top, order_like
 
 urlpatterns = [
     path('', top, name='top'),
+    path('order_like/', order_like, name='order_like'),
     path('admin/', admin.site.urls),
     path('links/', include('links.urls')),
     path('accounts/', include('accounts.urls')),

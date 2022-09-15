@@ -12,7 +12,6 @@ from likes.models import Like
 
 def top(request):
     context = []
-
     links = Link.objects.all().order_by('created_at').reverse()
     if request.user.is_authenticated:
         for link in links:
@@ -26,6 +25,23 @@ def top(request):
 
     context = {'context':context}
     return render(request, 'links/top.html', context)
+
+def order_like(request):
+    context = []
+    links = Link.objects.all().order_by('like_count').reverse()
+    if request.user.is_authenticated:
+        for link in links:
+            if Like.objects.filter(link=link, created_by=request.user).exists():
+                context.append({'link':link, 'like':True, 'like_count':link.like_count})
+            else:
+                context.append({'link':link, 'like':False, 'like_count':link.like_count})
+    else:
+        for link in links:
+            context.append({'link':link, 'like':False, 'like_count':link.like_count})
+
+    context = {'context':context}
+    return render(request, 'links/order_like.html', context)
+
 
 @login_required
 def link_new(request):

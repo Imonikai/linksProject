@@ -10,10 +10,10 @@
 
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a href="#" class="nav-link active">投稿日順</a>
+            <a href="{% url 'top' %}" class="nav-link">投稿日順</a>
         </li>
         <li class="nav-item">
-            <a href="{% url 'order_like' %}" class="nav-link">いいね数順</a>
+            <a href="#" class="nav-link active">いいね数順</a>
         </li>
     </ul>
     {% for data in context %}
@@ -49,6 +49,7 @@
             </div>
         </div>
     {% endfor %}
+
     
 
     <script>
