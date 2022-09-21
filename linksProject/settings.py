@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
     #外部から追加したアプリケーション
     'django_bootstrap5',
+    'django_extensions',#ER図を自動で生成するために追加した
 
     #作成したアプリケーション
     'links',
